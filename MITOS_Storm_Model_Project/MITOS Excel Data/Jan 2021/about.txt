@@ -1,0 +1,16 @@
+To use:
+Please enable macros when opening the workbook - it uses custom functions to retreive data
+
+Zones_Analysis_7-14_(filtered 24ft).xlsm
+	contains info for storms 7 through 14
+	ONLY contains intersections that were found at or above 24ft of elevation
+
+Zones_Analysis_FULL.xlsm 
+	contains info for ALL storms 1 through 14
+	
+	Master Table
+		contains the max depth and the ppercentage of the perimeter affected for every building and storm
+	Master Chart
+		contains a chart all buildings
+	Buildings Chart
+		allows user to select building by name or number and depth range of interest and displays it.

@@ -1,0 +1,25 @@
+MITOS-PROJECT LOG
+
+Started 11.07.2020
+
+11.07.2020
+Created a perimeter attribute for all the MIT buildings
+Created continuous values categorization for depths (5 bins)
+
+11.08.2020
+Tried Intersection tool - very few line intersections popped up... try a buffer region?
+Tried spatial join intersection - output was just all the buildings
+
+Tried many more different joins but either got 0 or just a few line intersections (I did get whole polygon intersections but it only captured those that overlapped with buildings
+
+Made a 2ft buffer layer that helped visually see intersections, but saw that it STILL didn't intersect with the Fitness Center building ---> so I manually increased the buffer to 4ft 
+
+Okay new approach since PolyNeighbor only takes in 1 input layer:
+	1) merge buffer and storm layer -- is there a way to only include those storm polygons that are near the buildings? 
+	2) Then use PolyNeighbor tool to find intersections... filter by hopefully building name?
+
+11.09
+1) did a union of both 100 year storm and mit building BUFFER layers
+2) Created a point intersection layer for the buffer and storm - could use this to get lengths? but not sure how to automate the process once I figure it out
+3) Ran more failed line intersections, ran poly neighbors on the union layer and took too long
+

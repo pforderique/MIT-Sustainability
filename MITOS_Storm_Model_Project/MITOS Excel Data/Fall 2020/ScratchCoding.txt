@@ -1,0 +1,77 @@
+def totalAffected(name, number, nameRange, numberRange, lengthRange):
+    if name == "None":
+    	# we use the number range if no input for name
+        totalAffected = sumif(numberRange, number, lengthRange)
+    else:
+	# if there is a name selected, then we use name
+	totalAffected = sumif(nameRange, number, lengthRange)
+		
+CONCAT(C1," % Affected Perimeter at Depths [",C2,", ",C3,"] (ft)")
+SUMIF('Data of Interest'!D:D,C1,'Data of Interest'!I:I)
+INDEX('Building Values'!A1:E128, MATCH(Charts!C1,'Building Values'!B:B,0),5)
+FILTER('Building Values'!E:E,'Building Values'!B:B=Charts!C1)
+SUMIFS('Data of Interest'!I:I, 'Data of Interest'!D:D,Charts!C1,'Data of Interest'!H:H,CONCAT(">=",C2),'Data of Interest'!H:H,CONCAT("<=",C3))
+SUMIFS('Data of Interest'!S:S, 'Data of Interest'!N:N,Charts!C1,'Data of Interest'!R:R,CONCAT(">=",C2),'Data of Interest'!R:R,CONCAT("<=",C3))
+
+------------------------------------------------------------------------
+
+'VBA scripts for MITOS visualization
+'Written by: Piero Orderique
+'12/18/2020
+
+'checks the building input in Excel and returns either name or number
+Public Function getbuilding(name As String, number As String)
+    If name <> "None" Then
+        ' return name as long as it isn't None
+        getbuilding = name
+    Else
+        getbuilding = number
+    End If
+End Function
+
+'creates the title for the graph
+Public Function getTitle(buildingName As String, buildingNumber As String, minDepth As Double, maxDepth As Double)
+    If buildingName <> "None" Then
+        Title = buildingName
+    Else
+        Title = Application.WorksheetFunction.Concat("Building ", buildingNumber)
+    End If
+    getTitle = Application.WorksheetFunction.Concat(Title, " % Affected Perimeter at Depths [", minDepth, ", ", maxDepth, "] (ft)")
+End Function
+
+'returns total perimeter of building
+Public Function getPerimeter(buildingName As String, buildingNumber As String, buildingInfoTable As Range, nameRange As Range, numberRange As Range, perimeterCol As Integer)
+    If buildingName <> "None" Then
+        'if name input isn't None, filter the building info data by name to get perimeter data
+        'INDEX('Building Values'!A1:E128, MATCH(Charts!C1,'Building Values'!B:B,0),5)
+        getPerimeter = Application.WorksheetFunction.Index(buildingInfoTable, Application.WorksheetFunction.Match(buildingName, nameRange, 0), perimeterCol)
+    Else
+        'else use number to filter building info table to get the perimeter
+        getPerimeter = Application.WorksheetFunction.Index(buildingInfoTable, Application.WorksheetFunction.Match(buildingNumber, numberRange, 0), perimeterCol)
+    End If
+End Function
+    
+'returns total affected length of building
+Public Function totalAffected(buildingName As String, buildingNumber As String, nameRange As Range, numberRange As Range, lengthRange As Range)
+    If buildingName <> "None" Then
+        'if name input isn't None, get the sum of the lengths using the input for the building name
+        totalAffected = Application.WorksheetFunction.SumIf(nameRange, buildingName, lengthRange)
+    Else
+        'else sum the length data by using the building number range instead
+        totalAffected = Application.WorksheetFunction.SumIf(numberRange, buildingNumber, lengthRange)
+    End If
+End Function
+    
+'return affected length that is in the depth range specified
+Public Function depthAffected(buildingName As String, buildingNumber As String, minDepth As Double, maxDepth As Double, nameRange As Range, numberRange As Range, depthRange As Range, lengthRange As Range)
+    lowerBound = Application.WorksheetFunction.Concat(">=", minDepth)
+    upperBound = Application.WorksheetFunction.Concat("<=", maxDepth)
+    If buildingName <> "None" Then
+        'if name input isn't None, get the sum of the lengths using the input for the building name
+        depthAffected = Application.WorksheetFunction.SumIfs(lengthRange, nameRange, buildingName, depthRange, lowerBound, depthRange, upperBound)
+    Else
+        'else lookup using building number
+        depthAffected = Application.WorksheetFunction.SumIfs(lengthRange, numberRange, buildingNumber, depthRange, lowerBound, depthRange, upperBound)
+    End If
+End Function
+
