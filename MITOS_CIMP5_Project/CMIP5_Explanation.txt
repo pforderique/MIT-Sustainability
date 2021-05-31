@@ -1,0 +1,11 @@
+CIMP5 DATA - MATTHEW PRESTON
+
+For a quick rundown, the file name indicates for which era (historical, rcp4.5, or rcp8.5) and variable (precip, tmax, or tmin) the mat file contains data.
+
+Each mat file contains a struct called “results” that contains information on the era and variable as well as a GCM struct.
+There’s quite a bit of information stored about each GCM, including the values and index of the lat/long coordinates closest to Cambridge (likely not very useful to you).
+There’s also the raw data (“Values”) as well as information about the unit of the data and several fields related to the time series.
+I set up a trim field to let me know which files I needed to remove leading or trailing data. For instance, you’ll see in the File field that some of the NetCDF files included data for December 1859, which I wouldn’t want to use as representative of the decade of the 1850s.
+The last field (“Temp” or “Precip”) in the struct contains the processed data that I used to make boxplots for Ken. Those graphs are also in the Google Drive in case they are helpful as you’re working with matplotlib. Note that there is a unit conversion between raw and processed data for both temp and precip.
+It may be useful for you to work first at replicating the Temp/Precip results in Python.
+Once you get comfortable with the precip, tmax, and tmin files, you could play around with the HDDCDD files. Basically you take the average of the tmax/tmin and subtract from the threshold (65 degrees). Here’s a link (https://www.weather.gov/key/climate_heat_cool) that I used when I generated the graphs.
